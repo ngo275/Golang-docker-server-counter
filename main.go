@@ -17,7 +17,7 @@ func main() {
 }
 
 type Page struct {
-    Count int64
+    Color string
 }
 
 func viewHandler (w http.ResponseWriter, r *http.Request) {
@@ -44,13 +44,23 @@ func viewHandler (w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func intToHexStr(num int64) (rgb string) {
+    // Todo: calculate rgb. This is a makeshift.
+    color := fmt.Sprintf("%x", num)
+    rgb = color + color + color
+
+    return rgb
+}
+
 func createDomFromTemplate (w http.ResponseWriter, res int64) {
-    tmpl, err := template.ParseFiles("view.html")
+    tmpl, err := template.ParseFiles("template/view.html")
     if err != nil {
         panic(err)
     }
 
-    page := Page{Count: res}
+    rgb := intToHexStr(res)
+    fmt.Print(rgb)
+    page := Page{Color: rgb}
     err = tmpl.Execute(w, page)
     if err != nil {
         panic(err)
